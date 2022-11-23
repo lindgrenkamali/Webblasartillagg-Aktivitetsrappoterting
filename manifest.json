@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "Work Search Extensions",
+  "description": "Base Level Extension",
+  "version": "1.0",
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": "icon.png"
+  },
+  "permissions": ["storage", "tabs"],
+  "content_scripts": [
+    {
+      "matches": ["https://arbetsformedlingen.se/platsbanken/annonser/*"],
+      "run_at": "document_end",
+      "js": ["script.js"]
+    },
+    {
+      "matches": ["https://arbetsformedlingen.se/for-arbetssokande/mina-sidor/aktivitetsrapportera/lagg-till-aktivitet"],
+      "run_at": "document_end",
+      "js": ["activityReport.js"]
+    }
+  ]
+}

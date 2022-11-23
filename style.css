@@ -1,0 +1,26 @@
+body {
+    background-color: 00005A;
+
+}
+
+html {
+    height: 16rem;
+}
+
+.container {
+    margin: 1rem;
+
+}
+
+.activityButton {
+    background-color: 9fd33c;
+    width: 10rem;
+    height: 2rem;
+    font-weight: 600;
+
+}
+
+p {
+    color: 9fd33c;
+    font-size: 1rem;
+}
