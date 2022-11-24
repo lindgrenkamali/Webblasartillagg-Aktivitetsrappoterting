@@ -1,3 +1,4 @@
+
 setTimeout(() => {
     chrome.storage.sync.get(["jobKey"], function (result) {
     inputJob(result);
