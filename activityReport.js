@@ -30,7 +30,7 @@ setTimeout(() => {
 
    const today = new Date();
 
-   const todayDate = today.getFullYear() + "-" + today.getMonth() + "-" + today.getDate();
+   const todayDate = today.getFullYear() + "-" + (today.getMonth()+ 1) + "-" + today.getDate();
 
    document.execCommand("insertText", false, todayDate);
 
