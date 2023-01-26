@@ -3,12 +3,19 @@ chrome.webNavigation.onHistoryStateUpdated.addListener(RunScript);
 
 function RunScript() {
   GetTabId().then(function(value) {
-  
+    
     if (value !== undefined)
     {
+    console.log(value.url);
+    if(value.url.includes("https://arbetsformedlingen.se/platsbanken/annonser?"))
+    {
+      chrome.scripting.executeScript({
+        target: {tabId: value.id, allFrames: true},
+        files: ["removeWorkAds.js"]
+      })
+    }
 
     chrome.scripting.executeScript({
-    
       target: {tabId: value.id, allFrames: true},
       files: ["script.js"]
   })

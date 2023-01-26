@@ -1,5 +1,41 @@
+function addWorkGiver(){
+  
+  chrome.storage.sync.get(["afsettings"]).then((result) => {
+    let bwg = [];
+
+    let afsettings = {
+      blockedWorkGivers: bwg
+    };
+
+    if(result.afsettings != undefined)
+    {
+      afsettings.blockedWorkGivers = result.afsettings.blockedWorkGivers;
+    }
+    const input = document.getElementById("blockInput").value;
+
+    if(input != ""){
+      afsettings.blockedWorkGivers.push(input);
+      chrome.storage.sync.set({ "afsettings": afsettings }).then(() => {
+       
+      });
+    }
+  });
+}
+
+function deleteBlockedWorkGiver(e)
+{
+  chrome.storage.sync.get(["afsettings"]).then((result) => {
+
+    const index = result.afsettings.blockedWorkGivers.indexOf(this.innerText);
+      result.afsettings.blockedWorkGivers.splice(index, 1);
+     
+      chrome.storage.sync.set({ "afsettings": result.afsettings }).then(() => {
+       
+      });
+  });
+}
+
 chrome.storage.sync.get(["jobKey"], function (result) {
-  console.log("Value currently is " + result.jobKey.title);
 
 const container = document.getElementById("currentWork");
 
@@ -29,5 +65,21 @@ activityLink.target = "_blank";
 activityLink.appendChild(activityButton);
 container.appendChild(activityLink);
 
+let workGiverList = document.getElementById("blockedWorkGivers");
+
+chrome.storage.sync.get(["afsettings"]).then((result) => {
+  if(result.afsettings != undefined)
+  {
+    result.afsettings.blockedWorkGivers.forEach(element => {
+      let blockedWorkGiver = document.createElement("li");
+      blockedWorkGiver.textContent = element;
+      blockedWorkGiver.onclick = deleteBlockedWorkGiver;
+      workGiverList.appendChild(blockedWorkGiver);
+     
+    });
+  }
+})
+
 });
 
+document.getElementById("blockInputButton").addEventListener("click", addWorkGiver);
