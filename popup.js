@@ -18,7 +18,7 @@ function addWorkGiver(){
     if(input != "" && !afsettings.blockedWorkGivers.includes(input)){
       afsettings.blockedWorkGivers.push(input);
       chrome.storage.sync.set({ "afsettings": afsettings }).then(() => {
-        console.log(newBlockedWorkGiverList);
+        
         addBlockedWorkGivers(newBlockedWorkGiverList);
 
       });
