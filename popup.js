@@ -11,15 +11,37 @@ function addWorkGiver(){
     {
       afsettings.blockedWorkGivers = result.afsettings.blockedWorkGivers;
     }
-    const input = document.getElementById("blockInput").value;
 
-    if(input != ""){
+    const input = document.getElementById("blockInput").value;
+    let newBlockedWorkGiverList = [input];
+
+    if(input != "" && !afsettings.blockedWorkGivers.includes(input)){
       afsettings.blockedWorkGivers.push(input);
       chrome.storage.sync.set({ "afsettings": afsettings }).then(() => {
-       
+        console.log(newBlockedWorkGiverList);
+        addBlockedWorkGivers(newBlockedWorkGiverList);
+
       });
     }
   });
+}
+
+function addBlockedWorkGivers(workgivers)
+{
+  let workGiverUL = document.getElementById("blockedWorkGivers");
+
+  workgivers.forEach(element => {
+    let blockedWorkGiver = document.createElement("li");
+      blockedWorkGiver.textContent = element;
+
+      blockedWorkGiver.onclick = deleteBlockedWorkGiver;
+      blockedWorkGiver.addEventListener("click", () => {
+        blockedWorkGiver.remove();
+      })
+
+      
+      workGiverUL.appendChild(blockedWorkGiver);
+  })
 }
 
 function deleteBlockedWorkGiver(e)
@@ -65,18 +87,13 @@ activityLink.target = "_blank";
 activityLink.appendChild(activityButton);
 container.appendChild(activityLink);
 
-let workGiverList = document.getElementById("blockedWorkGivers");
+
 
 chrome.storage.sync.get(["afsettings"]).then((result) => {
   if(result.afsettings != undefined)
   {
-    result.afsettings.blockedWorkGivers.forEach(element => {
-      let blockedWorkGiver = document.createElement("li");
-      blockedWorkGiver.textContent = element;
-      blockedWorkGiver.onclick = deleteBlockedWorkGiver;
-      workGiverList.appendChild(blockedWorkGiver);
-     
-    });
+    addBlockedWorkGivers(result.afsettings.blockedWorkGivers);
+
   }
 })
 

@@ -1,6 +1,6 @@
 body {
     background-color: 00005A;
-
+    width: 15rem;
 }
 
 
@@ -10,10 +10,8 @@ body {
 }
 
 .activityButton {
-    background-color: 9fd33c;
     width: 10rem;
     height: 2rem;
-    font-weight: 600;
 
 }
 
@@ -33,4 +31,26 @@ li {
 ul {
     padding-left: 0.5rem;
     margin: 1rem;
+}
+
+#blockedWorkGivers {
+    overflow: scroll;
+    height: 10rem;
+}
+
+li:hover {
+    color: red;
+}
+
+label {
+    display: block;
+}
+
+#blockInput {
+    width: 8rem;
+}
+
+button {
+    background-color: 9fd33c;
+    font-weight: 600;   
 }
