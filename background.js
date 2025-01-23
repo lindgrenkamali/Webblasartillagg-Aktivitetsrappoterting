@@ -6,7 +6,6 @@ function RunScript() {
     
     if (value !== undefined)
     {
-    console.log(value.url);
     if(value.url.includes("https://arbetsformedlingen.se/platsbanken/annonser?"))
     {
       chrome.scripting.executeScript({

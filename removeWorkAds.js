@@ -1,26 +1,44 @@
 setTimeout(() => {
     removeWorkAds();
     
-  }, "5 00");
+  }, "500");
 
 function removeWorkAds(){
     let workAds = document.getElementsByTagName("pb-feature-search-result-card");
-    let workAdsObjects = [];
-    let workAdsElement = document.getElementsByClassName("result-container")[0];
+    let workAdObjects = [];
+    let workAdElements = document.getElementsByClassName("result-container")[0];
     for (let i = 0; i < workAds.length; i++) {
-        workAdsObjects.push({"workad": workAds[i], "workgiver": workAds[i].getElementsByClassName("pb-company-name")[0].innerText})
+        workAdObjects.push({"id": i, "workAd": workAds[i], "title":  workAds[i].getElementsByTagName("a")[0].innerText,
+             "company": workAds[i].getElementsByClassName("pb-company-name")[0].innerText})
     }
     chrome.storage.sync.get(["afsettings"]).then((result) => {
-        result.afsettings.blockedWorkGivers.forEach(x => {
-            workAdsObjects.forEach(y => {
+        const workAdsToRemove = new Map();
+        result.afsettings.blockedCompanies.forEach(x => {
+            workAdObjects.forEach(y => {
                 
-                if(y.workgiver.includes(x))
+                if(y.company.includes(x))
                 {
-                    workAdsElement.removeChild(y.workad);
+                    workAdsToRemove.set(y.id, y.workAd)
+                    
                 }
             });
+
+            
         });
+        result.afsettings.blockedTitles.forEach(x => {
+            workAdObjects.forEach(y => {
+                if(y.title.includes(x))
+                {
+                    workAdsToRemove.set(y.id, y.workAd)
+                }
+            });
+
+        });
+
+        for (let [key, value] of workAdsToRemove){
+            workAdElements.removeChild(value);
+        }
+        
     })
 
-   
 }

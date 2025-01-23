@@ -23,7 +23,7 @@
       };
     
       chrome.storage.sync.set({ "jobKey": job }, function () {
-        console.log("saved");
+        
       });
       }
       

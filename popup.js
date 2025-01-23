@@ -1,55 +1,112 @@
-function addWorkGiver(){
-  
+function addCompany(){
   chrome.storage.sync.get(["afsettings"]).then((result) => {
-    let bwg = [];
 
     let afsettings = {
-      blockedWorkGivers: bwg
+      blockedCompanies: [],
+      blockedTitles: []
     };
 
     if(result.afsettings != undefined)
     {
-      afsettings.blockedWorkGivers = result.afsettings.blockedWorkGivers;
+      afsettings.blockedCompanies = result.afsettings.blockedCompanies;
+      afsettings.blockedTitles = result.afsettings.blockedTitles;
+      
     }
 
-    const input = document.getElementById("blockInput").value;
-    let newBlockedWorkGiverList = [input];
+    const input = document.getElementById("blockCompanyInput").value;
+    let newBlockedCompanies = [input];
 
-    if(input != "" && !afsettings.blockedWorkGivers.includes(input)){
-      afsettings.blockedWorkGivers.push(input);
+    if(input != "" && !afsettings.blockedCompanies.includes(input)){
+      afsettings.blockedCompanies.push(input);
       chrome.storage.sync.set({ "afsettings": afsettings }).then(() => {
         
-        addBlockedWorkGivers(newBlockedWorkGiverList);
+        addBlockedCompanies(newBlockedCompanies);
 
       });
     }
   });
 }
 
-function addBlockedWorkGivers(workgivers)
-{
-  let workGiverUL = document.getElementById("blockedWorkGivers");
+function addTitle(){
+  chrome.storage.sync.get(["afsettings"]).then((result) => {
 
-  workgivers.forEach(element => {
-    let blockedWorkGiver = document.createElement("li");
-      blockedWorkGiver.textContent = element;
+    let afsettings = {
+      blockedCompanies: [],
+      blockedTitles: []
+    };
 
-      blockedWorkGiver.onclick = deleteBlockedWorkGiver;
-      blockedWorkGiver.addEventListener("click", () => {
-        blockedWorkGiver.remove();
+    if(result.afsettings != undefined)
+    {
+      afsettings.blockedCompanies = result.afsettings.blockedCompanies;
+      afsettings.blockedTitles = result.afsettings.blockedTitles
+    }
+
+    const input = document.getElementById("blockTitleInput").value;
+    let newBlockedTitles = [input];
+
+    if(input != "" && !afsettings.blockedTitles.includes(input)){
+      afsettings.blockedTitles.push(input);
+      chrome.storage.sync.set({ "afsettings": afsettings }).then(() => {
+        addBlockedTitles(newBlockedTitles)
+
+      });
+    }
+  });
+}
+
+function addBlockedTitles(titles) {
+  let titleUL = document.getElementById("blockedTitles")
+
+  titles.forEach(element => {
+    let blockedTitle = document.createElement("li");
+      blockedTitle.textContent = element;
+
+      blockedTitle.onclick = deleteBlockedTitle;
+      blockedTitle.addEventListener("click", () => {
+        blockedTitle.remove();
       })
 
       
-      workGiverUL.appendChild(blockedWorkGiver);
+      titleUL.appendChild(blockedTitle);
   })
 }
 
-function deleteBlockedWorkGiver(e)
+function addBlockedCompanies(companies)
+{
+  let companyUL = document.getElementById("blockedCompanies");
+
+  companies.forEach(element => {
+    let blockedCompany = document.createElement("li");
+      blockedCompany.textContent = element;
+
+      blockedCompany.onclick = deleteBlockedCompany;
+      blockedCompany.addEventListener("click", () => {
+        blockedCompany.remove();
+      })
+
+      
+      companyUL.appendChild(blockedCompany);
+  })
+}
+
+function deleteBlockedCompany(e)
 {
   chrome.storage.sync.get(["afsettings"]).then((result) => {
 
-    const index = result.afsettings.blockedWorkGivers.indexOf(this.innerText);
-      result.afsettings.blockedWorkGivers.splice(index, 1);
+    const index = result.afsettings.blockedCompanies.indexOf(this.innerText);
+      result.afsettings.blockedCompanies.splice(index, 1);
+     
+      chrome.storage.sync.set({ "afsettings": result.afsettings }).then(() => {
+       
+      });
+  });
+}
+
+function deleteBlockedTitle(e){
+  chrome.storage.sync.get(["afsettings"]).then((result) => {
+
+    const index = result.afsettings.blockedTitles.indexOf(this.innerText);
+      result.afsettings.blockedTitles.splice(index, 1);
      
       chrome.storage.sync.set({ "afsettings": result.afsettings }).then(() => {
        
@@ -59,24 +116,29 @@ function deleteBlockedWorkGiver(e)
 
 chrome.storage.sync.get(["jobKey"], function (result) {
 
+
 const container = document.getElementById("currentWork");
 
-let titleP = document.createElement("p");
-titleP.textContent = "Titel: " + result.jobKey.title;
+if (result.jobKey != undefined) {
 
-let companyP = document.createElement("p");
-companyP.textContent = "Företag: " + result.jobKey.company;
+  let titleP = document.createElement("p");
+  titleP.textContent = "Titel: " + result.jobKey.title;
+  
+  let companyP = document.createElement("p");
+  companyP.textContent = "Företag: " + result.jobKey.company;
+  
+  let kindOfJobP = document.createElement("p");
+  kindOfJobP.textContent = "Roll: " + result.jobKey.kindOfJob;
+  
+  let locationP = document.createElement("p");
+  locationP.textContent = "Plats: " + result.jobKey.location;
+  
+  container.appendChild(titleP);
+  container.appendChild(companyP);
+  container.appendChild(kindOfJobP);
+  container.appendChild(locationP);
+}
 
-let kindOfJobP = document.createElement("p");
-kindOfJobP.textContent = "Roll: " + result.jobKey.kindOfJob;
-
-let locationP = document.createElement("p");
-locationP.textContent = "Plats: " + result.jobKey.location;
-
-container.appendChild(titleP);
-container.appendChild(companyP);
-container.appendChild(kindOfJobP);
-container.appendChild(locationP);
 
 let activityButton = document.createElement("button");
 activityButton.innerText = "Aktivitetsrapportera";
@@ -92,11 +154,13 @@ container.appendChild(activityLink);
 chrome.storage.sync.get(["afsettings"]).then((result) => {
   if(result.afsettings != undefined)
   {
-    addBlockedWorkGivers(result.afsettings.blockedWorkGivers);
+    addBlockedCompanies(result.afsettings.blockedCompanies);
+    addBlockedTitles(result.afsettings.blockedTitles)
 
   }
 })
 
 });
 
-document.getElementById("blockInputButton").addEventListener("click", addWorkGiver);
+document.getElementById("blockCompanyInputButton").addEventListener("click", addCompany);
+document.getElementById("blockTitleInputButton").addEventListener("click", addTitle);
