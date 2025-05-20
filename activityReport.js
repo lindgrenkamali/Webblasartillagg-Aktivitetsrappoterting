@@ -7,6 +7,31 @@ setTimeout(() => {
     
   }, "1000");
 
+  function setDate(){
+    let workSearchDate = document.getElementById("soktjobb-aktivitetsdatum")
+    const date = new Date();
+    const isoString = date.toISOString();
+    const formattedDate = isoString.split("T")[0];
+   
+    workSearchDate.value = formattedDate;
+
+   return formattedDate;
+  }
+
+  function setLocation(result){
+  let workLocation = document.getElementById("soktjobb-ort"); 
+   workLocation.focus();
+   const location = result.jobKey.location;
+   const formatted_location = location.slice(1, location.length);
+   const location_sliced = formatted_location.slice(0, formatted_location.length-1);
+   document.execCommand("insertText", false, location_sliced);
+
+   document.getElementById(`listItem + ${formatted_location}`).click();
+
+   return formatted_location;
+  }
+
+
   function inputJob(result)
   {
     document.getElementsByName("typ")[0].click();
@@ -20,19 +45,9 @@ setTimeout(() => {
 
    document.execCommand("insertText", false, result.jobKey.title);
 
-   let workLocation = document.getElementById("soktjobb-ort"); 
-   workLocation.focus();
+   setLocation(result);
+   setDate()
 
-   document.execCommand("insertText", false, result.jobKey.location);
-
-   let workSearchDate = document.getElementById("soktjobb-aktivitetsdatum");
-   workSearchDate.focus();
-
-   const today = new Date();
-
-   const todayDate = today.getFullYear() + "-" + (today.getMonth()+ 1) + "-" + today.getDate();
-
-   document.execCommand("insertText", false, todayDate);
 
    document.getElementById("soktjobb").addEventListener("submit", removeJobKey);
   }
