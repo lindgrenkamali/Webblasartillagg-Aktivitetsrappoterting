@@ -1,29 +1,39 @@
 
 chrome.webNavigation.onHistoryStateUpdated.addListener(RunScript);
 
-function RunScript() {
-  GetTabId().then(function(value) {
+async function RunScript() {
+
+  const tab = await GetTab();
     
-    if (value !== undefined)
+    if (tab !== undefined)
     {
-    if(value.url.includes("https://arbetsformedlingen.se/platsbanken/annonser?"))
+      
+    if(tab.url.includes("https://arbetsformedlingen.se/platsbanken/annonser"))
     {
-      chrome.scripting.executeScript({
-        target: {tabId: value.id, allFrames: true},
+
+      const subDir = tab.url.split("annonser");
+
+      if (subDir[1][0] == "?"){
+        chrome.scripting.executeScript({
+        target: {tabId: tab.id, allFrames: true},
         files: ["removeWorkAds.js"]
       })
-    }
+      }
+      else{
 
     chrome.scripting.executeScript({
-      target: {tabId: value.id, allFrames: true},
+      target: {tabId: tab.id, allFrames: true},
       files: ["script.js"]
-  })
+      })
+
+    }
+
+  }
 }
-  } );
 
 }
 
-async function GetTabId(){
+async function GetTab(){
   let queryOptions = { active: true, lastFocusedWindow: true };
   // `tab` will either be a `tabs.Tab` instance or `undefined`.
   let [tab] = await chrome.tabs.query(queryOptions);

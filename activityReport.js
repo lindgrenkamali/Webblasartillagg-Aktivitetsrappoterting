@@ -7,16 +7,6 @@ setTimeout(() => {
     
   }, "1000");
 
-  function setDate(){
-    let workSearchDate = document.getElementById("soktjobb-aktivitetsdatum")
-    const date = new Date();
-    const isoString = date.toISOString();
-    const formattedDate = isoString.split("T")[0];
-   
-    workSearchDate.value = formattedDate;
-
-   return formattedDate;
-  }
 
   function setLocation(result){
   let workLocation = document.getElementById("soktjobb-ort"); 
@@ -46,7 +36,6 @@ setTimeout(() => {
    document.execCommand("insertText", false, result.jobKey.title);
 
    setLocation(result);
-   setDate()
 
 
    document.getElementById("soktjobb").addEventListener("submit", removeJobKey);
