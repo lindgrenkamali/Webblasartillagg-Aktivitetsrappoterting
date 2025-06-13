@@ -5,12 +5,9 @@ async function RunScript() {
 
   const tab = await GetTab();
     
-    if (tab !== undefined)
+    if (tab !== undefined && tab.url.includes("https://arbetsformedlingen.se/platsbanken/annonser"))
     {
       
-    if(tab.url.includes("https://arbetsformedlingen.se/platsbanken/annonser"))
-    {
-
       const subDir = tab.url.split("annonser");
 
       if (subDir[1][0] == "?"){
@@ -29,8 +26,6 @@ async function RunScript() {
     }
 
   }
-}
-
 }
 
 async function GetTab(){
