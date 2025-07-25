@@ -1,11 +1,19 @@
 <html>
   <meta charset="UTF-8">
   <body>
-    <div id="currentWork" class="container">
+    <div id="tabs">
+      <button class="tabButton" id="lastJobButton">Sista jobbannons</button>
+      <button class="tabButton" id="searchedJobsButton">Sökta jobb</button>
+      <button class="tabButton" id="settingsButton">Inställningar</button>
+    </div>
+    <div class="container" id="lastJob">
       
     </div>
-    <div class="settings container">
-      <div class="settings">
+    <div class="container hide" id="searchedJobs">
+      <p>Tomt</p>
+
+    </div>
+    <div class="container hide" id="settings">
         <div class="blockCompany">
           <label for="blockCompanyInput">Blockera arbetsgivare</label>
           <input id="blockCompanyInput" name="blockCompanyInput">
@@ -22,7 +30,6 @@
             
           </ul>
         </div>
-      </div>
     </div>
   </body>
   <link rel="stylesheet" href="style.css">

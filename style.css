@@ -54,3 +54,11 @@ button {
     background-color: 9fd33c;
     font-weight: 600;   
 }
+
+.tabButton:focus {
+    background-color: #7DA336;
+}
+
+.hide {
+    display: none;
+}

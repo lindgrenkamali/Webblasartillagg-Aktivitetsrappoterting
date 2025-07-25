@@ -117,7 +117,7 @@ function deleteBlockedTitle(e){
 chrome.storage.sync.get(["jobKey"], function (result) {
 
 
-const container = document.getElementById("currentWork");
+const container = document.getElementById("lastJob");
 
 if (result.jobKey != undefined) {
 
@@ -162,5 +162,33 @@ chrome.storage.sync.get(["afsettings"]).then((result) => {
 
 });
 
+function changeTab(buttonId){
+  const containerEls = Array.from(document.getElementsByClassName("container"));
+
+  containerEls.forEach(buttonEl => {
+    buttonEl.classList.add("hide");
+  });
+
+
+  if (buttonId == "lastJobButton"){
+    const lastJobEl = document.getElementById("lastJob")
+    lastJobEl.classList.remove("hide");
+  }
+
+  else if (buttonId == "searchedJobsButton"){
+    const searchedJobsEl = document.getElementById("searchedJobs")
+    searchedJobsEl.classList.remove("hide");
+  }
+
+  else if (buttonId == "settingsButton"){
+    const settingsEl = document.getElementById("settings")
+    settingsEl.classList.remove("hide");
+  }
+
+}
+
 document.getElementById("blockCompanyInputButton").addEventListener("click", addCompany);
 document.getElementById("blockTitleInputButton").addEventListener("click", addTitle);
+[...document.getElementsByClassName("tabButton")].forEach(buttonEl => {
+buttonEl.addEventListener("click", () => changeTab(buttonEl.id))
+});
