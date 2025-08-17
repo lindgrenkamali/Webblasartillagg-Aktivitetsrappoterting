@@ -1,12 +1,11 @@
 body {
-    background-color: 00005A;
+    background-color: #00005A;
     width: 15rem;
 }
 
 
 .container {
     margin: 1rem;
-
 }
 
 .activityButton {
@@ -15,16 +14,15 @@ body {
 
 }
 
-p {
-    color: 9fd33c;
+p, a {
     font-size: 1rem;
 }
 
-label {
-    color: 9fd33c;
+p {
+    margin: 0.2rem;
 }
 
-li {
+label, li, p, a {
     color: 9fd33c;
 }
 
@@ -51,7 +49,7 @@ label {
 }
 
 button {
-    background-color: 9fd33c;
+    background-color: #9fd33c;
     font-weight: 600;   
 }
 
@@ -61,4 +59,9 @@ button {
 
 .hide {
     display: none;
+}
+
+.searchedJob {
+    border: solid #565694;
+    padding: 0.5rem;
 }

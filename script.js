@@ -16,15 +16,28 @@
       location = location.substring(location.lastIndexOf(" "));
     
       const job = {
+        url: window.location.href,
         title: title,
         company: company,
         kindOfJob: kindOfJob,
         location: location,
+        searched: false
       };
-    
-      chrome.storage.sync.set({ "jobKey": job }, function () {
-        
+      
+      chrome.storage.sync.get(["jobKeys"], function (result) {
+        const jobs = [job]
+        if (result.jobKeys == undefined){
+        chrome.storage.sync.set({ "jobKeys": jobs });
+        }
+
+        else {
+          let jobs = result.jobKeys;
+          jobs.push(job);
+          chrome.storage.sync.set({ "jobKeys": jobs });
+        }
       });
+
+      
       }
       
     }, "1000");

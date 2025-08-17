@@ -89,6 +89,7 @@ function addBlockedCompanies(companies)
   })
 }
 
+
 function deleteBlockedCompany(e)
 {
   chrome.storage.sync.get(["afsettings"]).then((result) => {
@@ -114,24 +115,25 @@ function deleteBlockedTitle(e){
   });
 }
 
-chrome.storage.sync.get(["jobKey"], function (result) {
+chrome.storage.sync.get(["jobKeys"], function (result) {
 
 
 const container = document.getElementById("lastJob");
-
-if (result.jobKey != undefined) {
+if (result.jobKeys != undefined) {
+  
+  const jobKey = result.jobKeys.pop()
 
   let titleP = document.createElement("p");
-  titleP.textContent = "Titel: " + result.jobKey.title;
+  titleP.textContent = "Titel: " + jobKey.title;
   
   let companyP = document.createElement("p");
-  companyP.textContent = "Företag: " + result.jobKey.company;
+  companyP.textContent = "Företag: " + jobKey.company;
   
   let kindOfJobP = document.createElement("p");
-  kindOfJobP.textContent = "Roll: " + result.jobKey.kindOfJob;
+  kindOfJobP.textContent = "Roll: " + jobKey.kindOfJob;
   
   let locationP = document.createElement("p");
-  locationP.textContent = "Plats: " + result.jobKey.location;
+  locationP.textContent = "Plats: " + jobKey.location;
   
   container.appendChild(titleP);
   container.appendChild(companyP);
@@ -162,10 +164,63 @@ chrome.storage.sync.get(["afsettings"]).then((result) => {
 
 });
 
-function changeTab(buttonId){
-  const containerEls = Array.from(document.getElementsByClassName("container"));
+function createSearchedJobsElements(){
+  let searchedJobsEl = document.getElementById("searchedJobs");
 
-  containerEls.forEach(buttonEl => {
+  chrome.storage.sync.get(["jobKeys"], function (result) {
+        
+        if (result.jobKeys == undefined){
+        let emptyEl = document.createElement("p");
+        emptyEl.innerText = "Inga jobb hittade";
+        searchedJobsEl.appendChild(emptyEl);
+        }
+
+        else {
+
+
+          for (let jobKeyIndex = 0; jobKeyIndex < result.jobKeys.length; jobKeyIndex++) {
+            let searchedJobEl = document.createElement("div");
+            searchedJobEl.className = "container searchedJob"
+            searchedJobEl.id = "searchedJob-" + jobKeyIndex;
+            const jobKey = result.jobKeys[jobKeyIndex];
+
+            let titleP = document.createElement("p");
+            titleP.textContent = "Titel: " + jobKey.title;
+            searchedJobEl.appendChild(titleP);
+            
+            let companyP = document.createElement("p");
+            companyP.textContent = "Företag: " + jobKey.company;
+            searchedJobEl.appendChild(companyP);
+            
+            let kindOfJobP = document.createElement("p");
+            kindOfJobP.textContent = "Roll: " + jobKey.kindOfJob;
+            searchedJobEl.appendChild(kindOfJobP);
+
+            let locationP = document.createElement("p");
+            locationP.textContent = "Plats: " + jobKey.location;
+            searchedJobEl.appendChild(locationP);
+
+            let urlA = document.createElement("a");
+            urlA.textContent = "Url: " + jobKey.url;
+            urlA.href = jobKey.url;
+            searchedJobEl.appendChild(urlA);
+
+            let searchedBox = document.createElement("input");
+            searchedBox.type = "checkbox";
+            searchedBox.checked = jobKey.searched;
+            searchedJobEl.appendChild(searchedBox);
+
+            searchedJobsEl.appendChild(searchedJobEl);
+          }
+          
+        }
+      });
+}
+
+function changeTab(buttonId){
+  const tabOptionEls = Array.from(document.getElementsByClassName("tabOption"));
+
+  tabOptionEls.forEach(buttonEl => {
     buttonEl.classList.add("hide");
   });
 
@@ -192,3 +247,5 @@ document.getElementById("blockTitleInputButton").addEventListener("click", addTi
 [...document.getElementsByClassName("tabButton")].forEach(buttonEl => {
 buttonEl.addEventListener("click", () => changeTab(buttonEl.id))
 });
+
+createSearchedJobsElements();
